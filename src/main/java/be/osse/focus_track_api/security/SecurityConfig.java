@@ -21,7 +21,7 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${cors.allowed-origins:}")
+    @Value("${cors.allowed-origins}")
     private String allowedOrigins;
 
     private final FirebaseTokenFilter firebaseTokenFilter;
