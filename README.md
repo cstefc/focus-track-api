@@ -20,7 +20,7 @@ The frontend repository is available [here](https://github.com/cstefc/focus_trac
 * **Database:** PostgreSQL 17
 * **Language:** Java 21
 * **Authentication:** Firebase Authentication (OAuth2 / JWT)
-* **Front-end:** React [(link to repo)](https://github.com/cstefc/focus_track_ui)
+* **Front-end:** React [(link to repo)](https://github.com/cstefc/focus-track-ui)
 * **Documentation:** OpenAPI
 
 ---
@@ -135,7 +135,7 @@ settings.
     ```yaml
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: cstefc/focus_track_api
+      IMAGE_NAME: cstefc/focus-track-api
     ```
 
 2. Set these environment values into your `.env` on your deployment server:
@@ -146,7 +146,7 @@ settings.
 3. Merge to `main` to trigger deployment.
 4. Copy the docker-compose.yml file to your deployment server and update the image used
    ```yaml
-   image: ghcr.io/cstefc/focus_track_api:latest
+   image: ghcr.io/cstefc/focus-track-api:latest
    ```   
 5. Run `docker-compose up`
 
