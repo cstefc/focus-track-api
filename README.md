@@ -51,15 +51,13 @@ Planned features and improvements:
 
 ---
 
-## Prerequisites
+## Project Setup Instructions
+
+### Prerequisites
 
 * PostgreSQL database + appUser for the API
 * Firebase project for authentication
 * Java 21 installed
-
----
-
-## Project Setup Instructions
 
 ### 1. Create `.env` file
 
