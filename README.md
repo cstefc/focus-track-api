@@ -62,13 +62,14 @@ Planned features and improvements:
 Create a `.env` file in the project root (or set environment variables locally) with the following defaults:
 
 ```
-DATABASE_HOST="db-hostname"
-DATABASE_PORT="db-port"
-DATABASE_NAME="db-name"
-DATABASE_USER="db-user"
-DATABASE_PASSWORD="something hard"
-FIREBASE_KEY_PATH="/path/to/private-key.json"
-SERVER_PORT="the port where the api should run"
+DATABASE_HOST=db-hostname
+DATABASE_PORT=db-port
+DATABASE_NAME=db-name
+DATABASE_USER=db-user
+DATABASE_PASSWORD=something hard
+FIREBASE_KEY_PATH=/path/to/private-key.json
+SERVER_PORT=8080
+CORS_ALLOWED_ORIGINS: http://localhost:5173
 ```
 
 ---
