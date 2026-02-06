@@ -1,9 +1,9 @@
 version: "3.9"
 
 services:
-  focus_track_postgres:
+  focus-track-postgres:
     image: postgres:16
-    container_name: focus_track_postgres
+    container_name: focus-track-postgres
     restart: always
     environment:
       POSTGRES_USER: ${DATABASE_USER}
@@ -16,16 +16,16 @@ services:
     volumes:
       - ./database:/var/lib/postgresql/data
 
-  focus_track_api:
-    image: ghcr.io/cstefc/focus_track_api:latest
-    container_name: focus_track_api
+  focus-track-api:
+    image: ghcr.io/cstefc/focus-track-api:latest
+    container_name: focus-track-api
     labels:
       com.centurylinklabs.watchtower.enable: "true"
     depends_on:
-      - focus_track_postgres
+      - focus-track-postgres
     restart: unless-stopped
     environment:
-      DATABASE_HOST: focus_track_postgres
+      DATABASE_HOST: focus-track-postgres
       DATABASE_PORT: 5432
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_USER: ${DATABASE_USER}
