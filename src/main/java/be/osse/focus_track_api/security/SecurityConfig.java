@@ -1,10 +1,9 @@
 package be.osse.focus_track_api.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,32 +14,28 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${cors.allowed-origins:}")
+    private String allowedOrigins;
     private final FirebaseTokenFilter firebaseTokenFilter;
-    private final Environment environment;
 
 
     @Autowired
-    public SecurityConfig(FirebaseTokenFilter firebaseTokenFilter, Environment environment) {
+    public SecurityConfig(FirebaseTokenFilter firebaseTokenFilter) {
         this.firebaseTokenFilter = firebaseTokenFilter;
-        this.environment = environment;
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        if (environment.acceptsProfiles(Profiles.of("dev"))) {
-            configuration.setAllowedOrigins(List.of("https://focus.osse.be", "https://focusapi.osse.be", "http://localhost:5173"));
-        } else {
-            configuration.setAllowedOrigins(List.of("https://focus.osse.be", "https://focusapi.osse.be"));
-        }
-
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
+        System.out.println(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
