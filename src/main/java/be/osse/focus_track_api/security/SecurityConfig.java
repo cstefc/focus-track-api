@@ -23,6 +23,7 @@ public class SecurityConfig {
 
     @Value("${cors.allowed-origins:}")
     private String allowedOrigins;
+
     private final FirebaseTokenFilter firebaseTokenFilter;
 
     @Autowired
