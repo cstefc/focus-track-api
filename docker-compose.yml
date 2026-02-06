@@ -1,40 +1,45 @@
 version: "3.9"
 
 services:
-  api:
-    image: ghcr.io/cstefc/focus_track_api:latest
-    container_name: api
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    ports:
-      - "8080:8080"
-    restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
-      interval: 20s
-      timeout: 3s
-      retries: 5
-
-  db:
+  focus_track_postgres:
     image: postgres:16
-    container_name: postgres
+    container_name: focus_track_postgres
     restart: always
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    networks:
+      - focustrack
+    expose:
+      - 5432
     volumes:
-      - /var/lib/myapp/postgres-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - ./database:/var/lib/postgresql/data
 
-# No named volumes needed
+  focus_track_api:
+    image: ghcr.io/cstefc/focus_track_api:latest
+    container_name: focus_track_api
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
+    depends_on:
+      - focus_track_postgres
+    restart: unless-stopped
+    environment:
+      DATABASE_HOST: focus_track_postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      FIREBASE_KEY_PATH: "/app/private-key.json"
+      SERVER_PORT: ${SERVER_PORT}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+    volumes:
+      - ./secrets/private-key.json:/app/private-key.json:ro
+    networks:
+      - focustrack
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+
+networks:
+  focustrack:
+    external: true
