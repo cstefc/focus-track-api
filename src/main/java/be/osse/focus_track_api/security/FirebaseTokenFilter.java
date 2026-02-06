@@ -23,8 +23,8 @@ import java.util.List;
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
 
-    @Value("${development-mode:false}")
-    private boolean developmentMode;
+    @Value("${firebase.bypass:false}")  // More explicit naming
+    private boolean firebaseBypass;
 
     private final AppUserService appUserService;
 
@@ -39,7 +39,7 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader("Authorization");
 
-        if (developmentMode) {
+        if (firebaseBypass) {
             if (!appUserService.existsByUuid("dev-001")) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
